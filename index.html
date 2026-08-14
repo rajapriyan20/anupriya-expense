@@ -70,8 +70,8 @@
 </head>
 <body class="bg-slate-900 md:bg-slate-950 text-slate-800 min-h-screen flex justify-center items-center">
 
-    <!-- Mobile Screen Frame Container -->
-    <div id="app-wrapper" class="w-full max-w-[430px] min-h-screen md:min-h-[880px] md:max-h-[92vh] md:rounded-[40px] bg-slate-50 relative flex flex-col overflow-hidden shadow-2xl border-0 md:border-[8px] md:border-slate-800">
+    <!-- Mobile Screen Frame Container (Height reduced by 40% to 528px) -->
+    <div id="app-wrapper" class="w-full max-w-[430px] h-[528px] md:h-[528px] md:rounded-[36px] bg-slate-50 relative flex flex-col overflow-hidden shadow-2xl border-0 md:border-[8px] md:border-slate-800">
         
         <!-- Global Toast Notification -->
         <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-4 max-w-[90%] w-80">
@@ -99,8 +99,8 @@
         </div>
 
         <!-- 1. PIN Lock / Welcome Screen -->
-        <div id="pin-screen" class="absolute inset-0 z-40 bg-gradient-to-b from-slate-900 via-emerald-950 to-slate-900 text-white flex flex-col justify-between p-4 pt-6 pb-safe overflow-y-auto no-scrollbar">
-            <div class="text-center pt-2 space-y-1">
+        <div id="pin-screen" class="absolute inset-0 z-40 bg-gradient-to-b from-slate-900 via-emerald-950 to-slate-900 text-white flex flex-col justify-between p-4 pt-4 pb-4">
+            <div class="text-center pt-1 space-y-1">
                 <div class="w-12 h-12 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-1 shadow-inner">
                     <i data-lucide="shield-check" class="w-6 h-6"></i>
                 </div>
@@ -109,7 +109,7 @@
             </div>
 
             <!-- PIN Display Dots -->
-            <div id="pin-display-container" class="my-1 text-center space-y-2">
+            <div id="pin-display-container" class="my-auto text-center space-y-1 py-1">
                 <p class="text-[10px] font-medium text-slate-300 uppercase tracking-widest">Enter Access PIN</p>
                 <div id="pin-dots" class="flex justify-center space-x-3 py-1">
                     <div class="w-3.5 h-3.5 rounded-full border-2 border-slate-600 transition-all duration-200"></div>
@@ -117,11 +117,11 @@
                     <div class="w-3.5 h-3.5 rounded-full border-2 border-slate-600 transition-all duration-200"></div>
                     <div class="w-3.5 h-3.5 rounded-full border-2 border-slate-600 transition-all duration-200"></div>
                 </div>
-                <p id="pin-error" class="text-[11px] text-rose-400 h-4 font-medium opacity-0 transition-opacity">Incorrect PIN. Try again.</p>
+                <p id="pin-error" class="text-[10px] text-rose-400 h-3 font-medium opacity-0 transition-opacity">Incorrect PIN. Try again.</p>
             </div>
 
-            <!-- Keypad (Elevated by ~30% Screen Height) -->
-            <div class="max-w-[280px] mx-auto w-full mb-[28%] pb-2">
+            <!-- Keypad -->
+            <div class="max-w-xs mx-auto w-full pb-1">
                 <div class="grid grid-cols-3 gap-2.5 text-center">
                     <button onclick="pressPin('1')" class="h-12 rounded-xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-base font-semibold text-slate-200 border border-slate-700/50 transition">1</button>
                     <button onclick="pressPin('2')" class="h-12 rounded-xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-base font-semibold text-slate-200 border border-slate-700/50 transition">2</button>
