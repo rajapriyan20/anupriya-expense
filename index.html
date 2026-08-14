@@ -61,12 +61,17 @@
         .animate-shake {
             animation: shake 0.4s ease-in-out;
         }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 231, 235, 0.7);
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-800 min-h-screen flex justify-center items-center p-0 md:p-4">
+<body class="bg-slate-900 md:bg-slate-950 text-slate-800 min-h-screen flex justify-center items-center">
 
     <!-- Mobile Screen Frame Container -->
-    <div id="app-wrapper" class="w-full max-w-[430px] h-screen h-[100dvh] md:h-[840px] md:max-h-[92vh] md:rounded-[40px] bg-slate-50 relative flex flex-col overflow-hidden shadow-2xl border-0 md:border-[8px] md:border-slate-800">
+    <div id="app-wrapper" class="w-full max-w-[430px] min-h-screen md:min-h-[880px] md:max-h-[92vh] md:rounded-[40px] bg-slate-50 relative flex flex-col overflow-hidden shadow-2xl border-0 md:border-[8px] md:border-slate-800">
         
         <!-- Global Toast Notification -->
         <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-4 max-w-[90%] w-80">
@@ -93,55 +98,46 @@
             </div>
         </div>
 
-        <!-- 1. Security PIN / Login Screen -->
-        <div id="pin-screen" class="absolute inset-0 z-40 bg-slate-950 flex items-center justify-center p-4 overflow-y-auto no-scrollbar">
-            <div class="w-full max-w-sm bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col my-auto">
-                <!-- Top Green Gradient Header -->
-                <div class="bg-gradient-to-br from-emerald-800 via-emerald-900 to-slate-900 p-5 text-center relative border-b border-emerald-500/20">
-                    <div class="w-12 h-12 bg-emerald-500 text-slate-900 rounded-2xl flex items-center justify-center font-black text-xl mx-auto mb-2 shadow-lg shadow-emerald-500/20">
-                        AD
-                    </div>
-                    <h1 class="text-lg font-bold text-white tracking-tight">Anupriya Dinesh</h1>
-                    <p class="text-xs text-emerald-300/80 font-medium">Household Expense Tracker</p>
+        <!-- 1. PIN Lock / Welcome Screen -->
+        <div id="pin-screen" class="absolute inset-0 z-40 bg-gradient-to-b from-slate-900 via-emerald-950 to-slate-900 text-white flex flex-col justify-between p-6 pt-safe pb-safe">
+            <div class="text-center pt-8 space-y-2">
+                <div class="w-16 h-16 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+                    <i data-lucide="shield-check" class="w-8 h-8"></i>
                 </div>
+                <h1 class="text-xl font-bold tracking-tight text-slate-100">Anupriya Dinesh</h1>
+                <p class="text-xs text-slate-400">Household Expense Tracker</p>
+            </div>
 
-                <!-- Form Body -->
-                <form onsubmit="handleLoginSubmit(event)" class="p-5 space-y-4 bg-slate-900">
-                    <!-- Username/ID Field -->
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">User Name (Login ID)</label>
-                        <div class="relative">
-                            <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                            <input type="text" id="login-username" placeholder="Enter username (e.g. admin or user)" class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs rounded-xl pl-9 pr-3 py-2.5 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
-                        </div>
-                    </div>
+            <!-- PIN Display Dots -->
+            <div id="pin-display-container" class="my-auto text-center space-y-4">
+                <p class="text-xs font-medium text-slate-300 uppercase tracking-widest">Enter Access PIN</p>
+                <div id="pin-dots" class="flex justify-center space-x-4 py-2">
+                    <div class="w-4 h-4 rounded-full border-2 border-slate-600 transition-all duration-200"></div>
+                    <div class="w-4 h-4 rounded-full border-2 border-slate-600 transition-all duration-200"></div>
+                    <div class="w-4 h-4 rounded-full border-2 border-slate-600 transition-all duration-200"></div>
+                    <div class="w-4 h-4 rounded-full border-2 border-slate-600 transition-all duration-200"></div>
+                </div>
+                <p id="pin-error" class="text-xs text-rose-400 h-4 font-medium opacity-0 transition-opacity">Incorrect PIN. Try again.</p>
+            </div>
 
-                    <!-- PIN Field -->
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">4-Digit Security PIN</label>
-                        <div class="relative">
-                            <i data-lucide="key-round" class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                            <input type="password" id="login-pin" maxlength="4" pattern="[0-9]*" inputmode="numeric" required placeholder="• • • •" class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-sm font-semibold rounded-xl pl-9 pr-3 py-2.5 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 tracking-widest transition">
-                        </div>
-                        <p id="pin-error" class="text-[11px] text-rose-400 font-medium h-4 mt-0.5 opacity-0 transition-opacity text-center">Incorrect Credentials</p>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-xs py-3 rounded-xl shadow-lg shadow-emerald-900/30 transition flex items-center justify-center space-x-2">
-                        <i data-lucide="log-in" class="w-4 h-4"></i>
-                        <span>Sign In to Expense Tracker</span>
+            <!-- Keypad -->
+            <div class="max-w-xs mx-auto w-full pb-4">
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <button onclick="pressPin('1')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">1</button>
+                    <button onclick="pressPin('2')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">2</button>
+                    <button onclick="pressPin('3')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">3</button>
+                    <button onclick="pressPin('4')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">4</button>
+                    <button onclick="pressPin('5')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">5</button>
+                    <button onclick="pressPin('6')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">6</button>
+                    <button onclick="pressPin('7')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">7</button>
+                    <button onclick="pressPin('8')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">8</button>
+                    <button onclick="pressPin('9')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">9</button>
+                    <button onclick="clearPin()" class="h-16 rounded-2xl bg-slate-800/30 text-xs font-semibold text-slate-400 active:bg-slate-800 transition">CLEAR</button>
+                    <button onclick="pressPin('0')" class="h-16 rounded-2xl bg-slate-800/60 hover:bg-slate-800 active:bg-slate-700 text-lg font-semibold text-slate-200 border border-slate-700/50 transition">0</button>
+                    <button onclick="backspacePin()" class="h-16 rounded-2xl bg-slate-800/30 text-slate-300 flex items-center justify-center active:bg-slate-800 transition">
+                        <i data-lucide="delete" class="w-5 h-5"></i>
                     </button>
-
-                    <!-- Default Credentials Box -->
-                    <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 text-xs text-slate-400 space-y-1">
-                        <div class="flex items-center space-x-1.5 text-emerald-400 font-semibold text-[11px]">
-                            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-                            <span>Access Credentials</span>
-                        </div>
-                        <p class="text-[11px] text-slate-400">Admin: <span class="font-mono text-slate-200 font-bold">admin</span> | PIN: <span class="font-mono text-slate-200 font-bold">6789</span></p>
-                        <p class="text-[11px] text-slate-400">User: <span class="font-mono text-slate-200 font-bold">user</span> | PIN: <span class="font-mono text-slate-200 font-bold">5555</span></p>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
 
@@ -493,6 +489,7 @@
 
         // Global State Variables
         let currentRole = null; // 'admin' | 'user'
+        let currentPin = '';
         let currentMonth = new Date().toISOString().substring(0, 7); // "YYYY-MM"
         let rawExpensesList = [];
         let currentBudgetsDoc = { overallBudget: 0, categoryBudgets: {} };
@@ -516,25 +513,59 @@
             'Others': '#64748b'
         };
 
-        window.handleLoginSubmit = function(e) {
-            e.preventDefault();
-            const pinVal = document.getElementById('login-pin').value;
-            const errEl = document.getElementById('pin-error');
+        // Security PIN Engine
+        window.pressPin = function(num) {
+            if (currentPin.length < 4) {
+                currentPin += num;
+                updatePinDots();
+                if (currentPin.length === 4) {
+                    setTimeout(validatePin, 100);
+                }
+            }
+        };
 
-            if (pinVal === '6789') {
-                errEl.classList.add('opacity-0');
+        window.backspacePin = function() {
+            if (currentPin.length > 0) {
+                currentPin = currentPin.slice(0, -1);
+                updatePinDots();
+            }
+        };
+
+        window.clearPin = function() {
+            currentPin = '';
+            updatePinDots();
+        };
+
+        function updatePinDots() {
+            const dots = document.querySelectorAll('#pin-dots div');
+            dots.forEach((dot, index) => {
+                if (index < currentPin.length) {
+                    dot.classList.add('bg-emerald-400', 'border-emerald-400', 'scale-110');
+                    dot.classList.remove('border-slate-600');
+                } else {
+                    dot.classList.remove('bg-emerald-400', 'border-emerald-400', 'scale-110');
+                    dot.classList.add('border-slate-600');
+                }
+            });
+        }
+
+        function validatePin() {
+            const errEl = document.getElementById('pin-error');
+            const pinBox = document.getElementById('pin-display-container');
+            
+            if (currentPin === '6789') {
                 loginSuccess('admin');
-            } else if (pinVal === '5555') {
-                errEl.classList.add('opacity-0');
+            } else if (currentPin === '5555') {
                 loginSuccess('user');
             } else {
                 errEl.classList.remove('opacity-0');
-                document.getElementById('pin-screen').classList.add('animate-shake');
+                pinBox.classList.add('animate-shake');
                 setTimeout(() => {
-                    document.getElementById('pin-screen').classList.remove('animate-shake');
+                    pinBox.classList.remove('animate-shake');
+                    clearPin();
                 }, 500);
             }
-        };
+        }
 
         function loginSuccess(role) {
             currentRole = role;
@@ -567,13 +598,16 @@
         window.logout = function() {
             sessionStorage.removeItem('anupriya_exp_role');
             currentRole = null;
-            document.getElementById('login-pin').value = '';
+            clearPin();
             document.getElementById('pin-screen').classList.remove('hidden');
         };
 
         function initAppListeners() {
+            // Set Month Picker Default
             const monthPicker = document.getElementById('global-month-picker');
             monthPicker.value = currentMonth;
+            
+            // Set Date Picker default to today
             document.getElementById('exp-date').value = new Date().toISOString().substring(0, 10);
 
             monthPicker.addEventListener('change', (e) => {
@@ -585,13 +619,22 @@
         }
 
         function attachRealtimeListeners() {
+            // Detach previous listeners
             if (expenseListener) expenseListener();
             if (budgetListener) budgetListener();
 
+            // Realtime Listener: Expenses for selected month
             const expRef = collection(db, 'expenses');
+            // Basic query filtering client side or by date prefix string
             expenseListener = onSnapshot(expRef, (snapshot) => {
                 const allDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                rawExpensesList = allDocs.filter(item => item.date && item.date.startsWith(currentMonth));
+                // Filter by monthYear
+                rawExpensesList = allDocs.filter(item => {
+                    if (!item.date) return false;
+                    return item.date.startsWith(currentMonth);
+                });
+
+                // Sort descending date
                 rawExpensesList.sort((a, b) => new Date(b.date) - new Date(a.date));
 
                 updateDashboardUI();
@@ -601,6 +644,7 @@
                 showToast("Failed to sync expenses", "error");
             });
 
+            // Realtime Listener: Budgets for selected month
             const budgetDocRef = doc(db, 'budgets', currentMonth);
             budgetListener = onSnapshot(budgetDocRef, (docSnap) => {
                 if (docSnap.exists()) {
@@ -616,14 +660,17 @@
         }
 
         function updateDashboardUI() {
+            // Calculate Total Spent
             const totalSpent = rawExpensesList.reduce((acc, curr) => acc + (parseFloat(curr.amount) || 0), 0);
             const overallBudget = parseFloat(currentBudgetsDoc.overallBudget) || 0;
             const remainingBudget = overallBudget - totalSpent;
 
+            // Update KPI Text
             document.getElementById('kpi-total-spent').textContent = `₹${totalSpent.toLocaleString('en-IN')}`;
             document.getElementById('kpi-budget-left').textContent = `₹${remainingBudget.toLocaleString('en-IN')}`;
             document.getElementById('kpi-budget-sub').textContent = `Of ₹${overallBudget.toLocaleString('en-IN')} limit`;
 
+            // Days calculation for Daily Avg
             const now = new Date();
             const [selectedYear, selectedMonthNum] = currentMonth.split('-').map(Number);
             const isCurrentMonth = (now.getFullYear() === selectedYear && (now.getMonth() + 1) === selectedMonthNum);
@@ -631,6 +678,7 @@
             const dailyAvg = daysPassed > 0 ? (totalSpent / daysPassed) : 0;
             document.getElementById('kpi-daily-avg').textContent = `₹${Math.round(dailyAvg).toLocaleString('en-IN')} / day`;
 
+            // Category Totals Map
             const catTotals = {};
             Object.keys(categoryColors).forEach(cat => catTotals[cat] = 0);
             
@@ -639,6 +687,7 @@
                 catTotals[cat] = (catTotals[cat] || 0) + (parseFloat(exp.amount) || 0);
             });
 
+            // Highest Category
             let topCat = '-';
             let topAmount = 0;
             Object.entries(catTotals).forEach(([cat, amt]) => {
@@ -650,7 +699,10 @@
             document.getElementById('kpi-top-category').textContent = topCat;
             document.getElementById('kpi-top-amount').textContent = `₹${topAmount.toLocaleString('en-IN')} spent`;
 
+            // Render Progress Bars & Check Over Budget Alerts
             renderCategoryProgressBars(catTotals);
+
+            // Render Charts
             renderCharts(catTotals);
         }
 
@@ -663,15 +715,21 @@
 
             Object.entries(catTotals).forEach(([cat, spent]) => {
                 const limit = parseFloat(catBudgets[cat]) || 0;
+                const percentage = limit > 0 ? Math.min(Math.round((spent / limit) * 100), 100) : 0;
                 
+                // Color status tag logic
                 let barColor = 'bg-emerald-500';
+                let badgeClass = 'text-emerald-700 bg-emerald-50';
+                
                 if (limit > 0) {
                     const actualRatio = (spent / limit) * 100;
                     if (actualRatio > 100) {
                         barColor = 'bg-rose-500';
+                        badgeClass = 'text-rose-700 bg-rose-50 border border-rose-200';
                         overBudgetAlerts.push(`${cat} exceeded by ₹${(spent - limit).toLocaleString('en-IN')}`);
                     } else if (actualRatio >= 80) {
                         barColor = 'bg-amber-500';
+                        badgeClass = 'text-amber-700 bg-amber-50 border border-amber-200';
                         if (actualRatio >= 90) {
                             overBudgetAlerts.push(`${cat} is at ${Math.round(actualRatio)}% limit`);
                         }
@@ -695,6 +753,7 @@
                 container.appendChild(row);
             });
 
+            // Banner Alert Handle
             const alertBanner = document.getElementById('budget-alert-banner');
             const alertText = document.getElementById('budget-alert-text');
             if (overBudgetAlerts.length > 0) {
@@ -706,6 +765,7 @@
         }
 
         function renderCharts(catTotals) {
+            // 1. Doughnut Chart
             const emptyMsg = document.getElementById('chart-empty-msg');
             const activeCategories = Object.keys(catTotals).filter(cat => catTotals[cat] > 0);
             
@@ -739,6 +799,7 @@
                 }
             });
 
+            // 2. Daily Bar Chart
             const [year, month] = currentMonth.split('-').map(Number);
             const daysInMonth = new Date(year, month, 0).getDate();
             const dailyMap = new Array(daysInMonth).fill(0);
@@ -898,6 +959,7 @@
                 return;
             }
 
+            // Group transactions by date
             const grouped = {};
             filtered.forEach(exp => {
                 const dateKey = exp.date || 'Unknown Date';
@@ -911,6 +973,7 @@
                 const dateGroup = document.createElement('div');
                 dateGroup.className = 'space-y-2';
 
+                // Date Badge
                 const d = new Date(dateKey + 'T00:00:00');
                 const formattedDate = isNaN(d.getTime()) ? dateKey : d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
 
@@ -1042,6 +1105,7 @@
         window.showToast = function(msg, type = 'info') {
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
 
             toastMsg.textContent = msg;
             toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
