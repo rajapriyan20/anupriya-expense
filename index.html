@@ -131,6 +131,10 @@
       </div>
 
       <div class="flex items-center gap-2">
+        <div id="connectionStatusBadge" class="flex items-center gap-1.5 px-2 py-1 rounded-xl bg-slate-800 border border-slate-700 text-[10px] font-semibold text-slate-400 transition-all duration-300" title="Checking Connection...">
+          <i id="connectionStatusIcon" class="fa-solid fa-wifi text-slate-400"></i>
+          <span id="connectionStatusText" class="hidden sm:inline">Init</span>
+        </div>
         <button onclick="openMonthPickerModal()" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 flex items-center justify-center active-scale" title="Change Month">
           <i class="fa-regular fa-calendar-days text-sm"></i>
         </button>
@@ -426,9 +430,9 @@
       </button>
     </nav>
 
-    <!-- MODAL 1: ADD / EDIT EXPENSE -->
-    <div id="expenseModal" class="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="bg-white w-full max-h-[90vh] rounded-t-3xl sm:rounded-3xl p-5 overflow-y-auto space-y-4 shadow-2xl transition-transform duration-300 translate-y-full sm:translate-y-0">
+    <!-- MODAL 1: ADD / EDIT EXPENSE (FIXED POSITIONING & TRANSFORM) -->
+    <div id="expenseModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="expenseModalCard" class="bg-white w-full max-h-[90vh] rounded-t-3xl sm:rounded-3xl p-5 overflow-y-auto space-y-4 shadow-2xl transform translate-y-full transition-transform duration-300">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <h3 id="expenseModalTitle" class="text-base font-bold text-slate-800">Add New Expense</h3>
           <button onclick="closeExpenseModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
@@ -484,8 +488,8 @@
     </div>
 
     <!-- MODAL 2: CATEGORY MASTER -->
-    <div id="categoryMasterModal" class="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="bg-white w-full max-h-[85vh] rounded-t-3xl sm:rounded-3xl p-5 overflow-y-auto space-y-4 shadow-2xl">
+    <div id="categoryMasterModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="categoryMasterModalCard" class="bg-white w-full max-h-[85vh] rounded-t-3xl sm:rounded-3xl p-5 overflow-y-auto space-y-4 shadow-2xl transform translate-y-full transition-transform duration-300">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
             <h3 class="text-base font-bold text-slate-800">Category Master</h3>
@@ -533,8 +537,8 @@
     </div>
 
     <!-- MODAL 3: DEFINE MONTHLY BUDGET -->
-    <div id="budgetModal" class="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="bg-white w-full max-h-[85vh] rounded-t-3xl sm:rounded-3xl p-5 overflow-y-auto space-y-4 shadow-2xl">
+    <div id="budgetModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="budgetModalCard" class="bg-white w-full max-h-[85vh] rounded-t-3xl sm:rounded-3xl p-5 overflow-y-auto space-y-4 shadow-2xl transform translate-y-full transition-transform duration-300">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
             <h3 class="text-base font-bold text-slate-800">Set Monthly Budget</h3>
@@ -567,8 +571,8 @@
     </div>
 
     <!-- MODAL 4: SELECT MONTH -->
-    <div id="monthPickerModal" class="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="bg-white w-full max-w-xs rounded-3xl p-5 space-y-4 shadow-2xl">
+    <div id="monthPickerModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="monthPickerModalCard" class="bg-white w-full max-w-xs rounded-3xl p-5 space-y-4 shadow-2xl">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100">
           <h3 class="text-sm font-bold text-slate-800">Select View Month</h3>
           <button onclick="closeMonthPickerModal()" class="text-slate-400 hover:text-slate-600">
@@ -586,7 +590,7 @@
     </div>
 
     <!-- TOAST NOTIFICATION CONTAINER -->
-    <div id="toast" class="absolute top-16 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-full shadow-xl border border-slate-700 flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none">
+    <div id="toast" class="fixed top-16 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-full shadow-xl border border-slate-700 flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none">
       <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
       <span id="toastMessage">Success</span>
     </div>
@@ -628,18 +632,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Global App State
-    window.appState = {
-      currentUserRole: null, // 'admin' (6789) or 'user' (5555)
-      pinBuffer: '',
-      currentMonth: new Date().toISOString().substring(0, 7), // "YYYY-MM"
-      activeTab: 'home',
-      categories: [],
-      expenses: [],
-      budgets: {}, // Keyed by month "YYYY-MM"
-      dbConnected: false
-    };
-
     // Default Seed Master Categories
     const DEFAULT_CATEGORIES = [
       { id: 'cat_groceries', name: 'Groceries & Provisions', color: '#10b981', icon: 'fa-cart-shopping', isSystem: true },
@@ -652,16 +644,51 @@
       { id: 'cat_misc', name: 'Miscellaneous', color: '#64748b', icon: 'fa-box', isSystem: true }
     ];
 
-    // Seed Initial Expenses if empty
-    const DEFAULT_EXPENSES = [
-      { id: 'exp_1', amount: 4500, categoryId: 'cat_groceries', date: '2026-08-02', paymentMode: 'UPI / GPay', note: 'Monthly Provisions from Supermarket' },
-      { id: 'exp_2', amount: 2800, categoryId: 'cat_utilities', date: '2026-08-05', paymentMode: 'Net Banking', note: 'Electricity Bill TNEB' },
-      { id: 'exp_3', amount: 1200, categoryId: 'cat_dining', date: '2026-08-10', paymentMode: 'UPI / GPay', note: 'Family Weekend Lunch' },
-      { id: 'exp_4', amount: 2500, categoryId: 'cat_transport', date: '2026-08-12', paymentMode: 'Credit Card', note: 'Car Fuel Fillup' },
-      { id: 'exp_5', amount: 950, categoryId: 'cat_medical', date: '2026-08-14', paymentMode: 'Cash', note: 'Pharmacy Medicines' }
-    ];
+    // Global App State (Strict Firebase In-Memory state - NO LocalStorage fallback)
+    window.appState = {
+      currentUserRole: null, // 'admin' (6789) or 'user' (5555)
+      pinBuffer: '',
+      currentMonth: new Date().toISOString().substring(0, 7), // "YYYY-MM"
+      activeTab: 'home',
+      categories: [...DEFAULT_CATEGORIES],
+      expenses: [],
+      budgets: {},
+      dbConnected: false
+    };
 
-    // Initialize Auth & Firestore Listeners
+    window.updateConnectionIndicator = function() {
+      const badge = document.getElementById('connectionStatusBadge');
+      const icon = document.getElementById('connectionStatusIcon');
+      const text = document.getElementById('connectionStatusText');
+      if (!badge || !icon || !text) return;
+
+      const isOnline = navigator.onLine;
+      const isDbReady = window.appState.dbConnected;
+
+      if (isOnline && isDbReady) {
+        badge.className = "flex items-center gap-1.5 px-2 py-1 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-[10px] font-semibold text-emerald-400";
+        icon.className = "fa-solid fa-wifi text-emerald-400 animate-pulse";
+        text.innerText = "Online";
+        badge.title = "Connected & Synced with Firebase";
+      } else if (isOnline && !isDbReady) {
+        badge.className = "flex items-center gap-1.5 px-2 py-1 rounded-xl bg-amber-500/20 border border-amber-500/30 text-[10px] font-semibold text-amber-400";
+        icon.className = "fa-solid fa-spinner fa-spin text-amber-400";
+        text.innerText = "Connecting";
+        badge.title = "Internet available, connecting to Firebase...";
+      } else {
+        badge.className = "flex items-center gap-1.5 px-2 py-1 rounded-xl bg-rose-500/20 border border-rose-500/30 text-[10px] font-semibold text-rose-400";
+        icon.className = "fa-solid fa-wifi-slash text-rose-400";
+        text.innerText = "Offline";
+        badge.title = "No internet connection. Firebase operations disabled.";
+      }
+    };
+
+    // Live internet check every 1 second
+    setInterval(window.updateConnectionIndicator, 1000);
+    window.addEventListener('online', window.updateConnectionIndicator);
+    window.addEventListener('offline', window.updateConnectionIndicator);
+
+    // Initialize Auth & Firestore Realtime Listeners
     async function initAuth() {
       try {
         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -670,7 +697,8 @@
           await signInAnonymously(auth);
         }
       } catch (err) {
-        console.warn("Auth initialization warning:", err);
+        console.warn("Auth initialization error:", err);
+        showToast("Authentication Failed: " + err.message, "error");
       }
     }
 
@@ -678,8 +706,7 @@
       if (user) {
         setupFirestoreRealtime();
       } else {
-        // Fallback to local memory if offline
-        loadLocalFallbackData();
+        renderAppUI();
       }
     });
 
@@ -690,21 +717,23 @@
       onSnapshot(
         collection(db, `${publicPath}/categories`),
         (snapshot) => {
-          if (snapshot.empty) {
-            // Seed default categories to Firestore
-            DEFAULT_CATEGORIES.forEach(c => {
-              setDoc(doc(db, `${publicPath}/categories`, c.id), c);
-            });
-            window.appState.categories = DEFAULT_CATEGORIES;
-          } else {
-            window.appState.categories = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-          }
           window.appState.dbConnected = true;
+          window.updateConnectionIndicator();
+          if (!snapshot.empty) {
+            window.appState.categories = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+          } else {
+            // Seed default categories to Firestore if empty
+            DEFAULT_CATEGORIES.forEach(cat => {
+              setDoc(doc(db, `${publicPath}/categories`, cat.id), cat).catch(console.warn);
+            });
+          }
           renderAppUI();
         },
         (error) => {
           console.error("Firestore Category Sync Error:", error);
-          loadLocalFallbackData();
+          window.appState.dbConnected = false;
+          window.updateConnectionIndicator();
+          showToast("Firebase Sync Error: Categories unavailable", "error");
         }
       );
 
@@ -712,18 +741,20 @@
       onSnapshot(
         collection(db, `${publicPath}/expenses`),
         (snapshot) => {
-          if (snapshot.empty) {
-            DEFAULT_EXPENSES.forEach(e => {
-              setDoc(doc(db, `${publicPath}/expenses`, e.id), e);
-            });
-            window.appState.expenses = DEFAULT_EXPENSES;
-          } else {
+          window.appState.dbConnected = true;
+          window.updateConnectionIndicator();
+          if (!snapshot.empty) {
             window.appState.expenses = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+          } else {
+            window.appState.expenses = [];
           }
           renderAppUI();
         },
         (error) => {
           console.error("Firestore Expense Sync Error:", error);
+          window.appState.dbConnected = false;
+          window.updateConnectionIndicator();
+          showToast("Firebase Sync Error: Expenses unavailable", "error");
         }
       );
 
@@ -731,46 +762,44 @@
       onSnapshot(
         collection(db, `${publicPath}/budgets`),
         (snapshot) => {
-          const budgetObj = {};
-          snapshot.docs.forEach(d => {
-            budgetObj[d.id] = d.data();
-          });
-          window.appState.budgets = budgetObj;
+          window.appState.dbConnected = true;
+          window.updateConnectionIndicator();
+          if (!snapshot.empty) {
+            const budgetObj = {};
+            snapshot.docs.forEach(d => {
+              budgetObj[d.id] = d.data();
+            });
+            window.appState.budgets = budgetObj;
+          }
           renderAppUI();
         },
         (error) => {
           console.error("Firestore Budget Sync Error:", error);
+          window.appState.dbConnected = false;
+          window.updateConnectionIndicator();
+          showToast("Firebase Sync Error: Budgets unavailable", "error");
         }
       );
     }
 
-    function loadLocalFallbackData() {
-      if (window.appState.categories.length === 0) {
-        window.appState.categories = DEFAULT_CATEGORIES;
-      }
-      if (window.appState.expenses.length === 0) {
-        window.appState.expenses = DEFAULT_EXPENSES;
-      }
-      renderAppUI();
-    }
-
-    // Exported Helper Methods for UI Operations
     window.saveCategoryToDb = async function(categoryObj) {
       if (!window.appState.currentUserRole || window.appState.currentUserRole !== 'admin') {
         showToast("Only Admin can modify categories!", "error");
         return;
       }
+
+      if (!navigator.onLine) {
+        showToast("No internet connection! Cannot save to Firebase.", "error");
+        return;
+      }
+
       try {
         const path = `artifacts/${appId}/public/data/categories`;
         await setDoc(doc(db, path, categoryObj.id), categoryObj);
-        showToast("Category saved successfully");
+        showToast("Category saved to Firebase!");
       } catch (e) {
-        // Fallback in-memory
-        const idx = window.appState.categories.findIndex(c => c.id === categoryObj.id);
-        if (idx >= 0) window.appState.categories[idx] = categoryObj;
-        else window.appState.categories.push(categoryObj);
-        renderAppUI();
-        showToast("Category updated (Local)");
+        console.error("Firestore category save error:", e);
+        showToast("Firebase Error: " + (e.message || "Failed to save category"), "error");
       }
     };
 
@@ -779,27 +808,42 @@
         showToast("Only Admin can delete categories!", "error");
         return;
       }
+
+      if (!navigator.onLine) {
+        showToast("No internet connection! Cannot delete from Firebase.", "error");
+        return;
+      }
+
+      // GUARD: Check if category is used in existing transactions
+      const linkedCount = window.appState.expenses.filter(e => e.categoryId === catId).length;
+      if (linkedCount > 0) {
+        showToast(`Cannot delete! ${linkedCount} transaction(s) use this category.`, "error");
+        return;
+      }
+
       try {
         const path = `artifacts/${appId}/public/data/categories`;
         await deleteDoc(doc(db, path, catId));
-        showToast("Category deleted");
+        showToast("Category deleted from Firebase");
       } catch (e) {
-        window.appState.categories = window.appState.categories.filter(c => c.id !== catId);
-        renderAppUI();
+        console.error("Firestore category delete error:", e);
+        showToast("Firebase Error: " + (e.message || "Failed to delete category"), "error");
       }
     };
 
     window.saveExpenseToDb = async function(expenseObj) {
+      if (!navigator.onLine) {
+        showToast("No internet connection! Cannot save expense to Firebase.", "error");
+        return;
+      }
+
       try {
         const path = `artifacts/${appId}/public/data/expenses`;
         await setDoc(doc(db, path, expenseObj.id), expenseObj);
-        showToast("Expense recorded successfully");
+        showToast("Expense saved to Firebase!");
       } catch (e) {
-        const idx = window.appState.expenses.findIndex(x => x.id === expenseObj.id);
-        if (idx >= 0) window.appState.expenses[idx] = expenseObj;
-        else window.appState.expenses.push(expenseObj);
-        renderAppUI();
-        showToast("Expense recorded (Local)");
+        console.error("Firestore expense save error:", e);
+        showToast("Firebase Error: " + (e.message || "Failed to save expense"), "error");
       }
     };
 
@@ -808,13 +852,19 @@
         showToast("Only Admin can delete expenses!", "error");
         return;
       }
+
+      if (!navigator.onLine) {
+        showToast("No internet connection! Cannot delete from Firebase.", "error");
+        return;
+      }
+
       try {
         const path = `artifacts/${appId}/public/data/expenses`;
         await deleteDoc(doc(db, path, expId));
-        showToast("Expense deleted");
+        showToast("Expense deleted from Firebase");
       } catch (e) {
-        window.appState.expenses = window.appState.expenses.filter(x => x.id !== expId);
-        renderAppUI();
+        console.error("Firestore expense delete error:", e);
+        showToast("Firebase Error: " + (e.message || "Failed to delete expense"), "error");
       }
     };
 
@@ -823,13 +873,19 @@
         showToast("Only Admin can configure budgets!", "error");
         return;
       }
+
+      if (!navigator.onLine) {
+        showToast("No internet connection! Cannot save budget to Firebase.", "error");
+        return;
+      }
+
       try {
         const path = `artifacts/${appId}/public/data/budgets`;
         await setDoc(doc(db, path, monthKey), budgetObj);
-        showToast("Monthly Budget updated");
+        showToast("Monthly Budget saved to Firebase!");
       } catch (e) {
-        window.appState.budgets[monthKey] = budgetObj;
-        renderAppUI();
+        console.error("Firestore budget save error:", e);
+        showToast("Firebase Error: " + (e.message || "Failed to save budget"), "error");
       }
     };
 
@@ -1376,7 +1432,7 @@
       }).join('');
     }
 
-    // Modal Helpers
+    // Modal Display Controllers with Mobile Slide Transforms
     function openAddExpenseModal() {
       document.getElementById('expenseForm').reset();
       document.getElementById('expenseIdInput').value = '';
@@ -1388,11 +1444,16 @@
       catSelect.innerHTML = window.appState.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 
       const modal = document.getElementById('expenseModal');
+      const card = document.getElementById('expenseModalCard');
       modal.classList.remove('opacity-0', 'pointer-events-none');
+      card.classList.remove('translate-y-full');
     }
 
     function closeExpenseModal() {
-      document.getElementById('expenseModal').classList.add('opacity-0', 'pointer-events-none');
+      const modal = document.getElementById('expenseModal');
+      const card = document.getElementById('expenseModalCard');
+      card.classList.add('translate-y-full');
+      modal.classList.add('opacity-0', 'pointer-events-none');
     }
 
     function editExpense(expId) {
@@ -1431,30 +1492,50 @@
       }
       renderCategoryMasterList();
       const modal = document.getElementById('categoryMasterModal');
+      const card = document.getElementById('categoryMasterModalCard');
       modal.classList.remove('opacity-0', 'pointer-events-none');
+      card.classList.remove('translate-y-full');
     }
 
     function closeCategoryMasterModal() {
-      document.getElementById('categoryMasterModal').classList.add('opacity-0', 'pointer-events-none');
+      const modal = document.getElementById('categoryMasterModal');
+      const card = document.getElementById('categoryMasterModalCard');
+      card.classList.add('translate-y-full');
+      modal.classList.add('opacity-0', 'pointer-events-none');
     }
 
     function renderCategoryMasterList() {
       const container = document.getElementById('categoryMasterList');
-      container.innerHTML = window.appState.categories.map(cat => `
-        <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-          <div class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white" style="background-color: ${cat.color}">
-              <i class="fa-solid ${cat.icon} text-xs"></i>
+      container.innerHTML = window.appState.categories.map(cat => {
+        // Calculate linked expenses count
+        const linkedCount = window.appState.expenses.filter(e => e.categoryId === cat.id).length;
+        const isProtected = linkedCount > 0;
+
+        return `
+          <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white" style="background-color: ${cat.color}">
+                <i class="fa-solid ${cat.icon} text-xs"></i>
+              </div>
+              <div>
+                <span class="text-xs font-bold text-slate-800 block">${cat.name}</span>
+                ${isProtected ? `<span class="text-[10px] text-amber-600 font-medium">${linkedCount} active expense(s)</span>` : `<span class="text-[10px] text-slate-400">0 active expenses</span>`}
+              </div>
             </div>
-            <span class="text-xs font-bold text-slate-800">${cat.name}</span>
+            <div class="flex items-center gap-1">
+              ${isProtected ? `
+                <button onclick="showToast('Cannot delete category with linked expenses (${linkedCount})', 'error')" title="Category in use" class="w-7 h-7 rounded-lg bg-slate-200 text-slate-400 cursor-not-allowed flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-lock text-xs"></i>
+                </button>
+              ` : `
+                <button onclick="deleteCategoryFromMaster('${cat.id}')" title="Delete Category" class="w-7 h-7 rounded-lg bg-rose-50 text-rose-500 hover:bg-rose-100 flex items-center justify-center text-xs active-scale">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              `}
+            </div>
           </div>
-          <div class="flex items-center gap-1">
-            <button onclick="deleteCategoryFromMaster('${cat.id}')" class="w-7 h-7 rounded-lg bg-rose-50 text-rose-500 hover:bg-rose-100 flex items-center justify-center text-xs">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function handleSaveCategory(event) {
@@ -1471,7 +1552,7 @@
 
     function deleteCategoryFromMaster(catId) {
       window.deleteCategoryFromDb(catId);
-      setTimeout(renderCategoryMasterList, 300);
+      setTimeout(renderCategoryMasterList, 200);
     }
 
     // Budget Modal
@@ -1496,16 +1577,22 @@
               </div>
               <span class="text-xs font-medium text-slate-700 truncate">${cat.name}</span>
             </div>
-            <input type="number" data-catid="${cat.id}" value="${val}" placeholder="Ceiling (₹)" class="cat-budget-input w-28 text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 text-right font-bold text-slate-800">
+            <input type="number" data-catid="${cat.id}" value="${val}" placeholder="Ceiling (₹)" class="cat-budget-input w-28 text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 text-right font-bold text-slate-800 focus:outline-none focus:border-emerald-500">
           </div>
         `;
       }).join('');
 
-      document.getElementById('budgetModal').classList.remove('opacity-0', 'pointer-events-none');
+      const modal = document.getElementById('budgetModal');
+      const card = document.getElementById('budgetModalCard');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      card.classList.remove('translate-y-full');
     }
 
     function closeBudgetModal() {
-      document.getElementById('budgetModal').classList.add('opacity-0', 'pointer-events-none');
+      const modal = document.getElementById('budgetModal');
+      const card = document.getElementById('budgetModalCard');
+      card.classList.add('translate-y-full');
+      modal.classList.add('opacity-0', 'pointer-events-none');
     }
 
     function handleSaveBudget(event) {
@@ -1534,11 +1621,13 @@
     // Month Selection Modal
     function openMonthPickerModal() {
       document.getElementById('monthPickerInput').value = window.appState.currentMonth;
-      document.getElementById('monthPickerModal').classList.remove('opacity-0', 'pointer-events-none');
+      const modal = document.getElementById('monthPickerModal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
     }
 
     function closeMonthPickerModal() {
-      document.getElementById('monthPickerModal').classList.add('opacity-0', 'pointer-events-none');
+      const modal = document.getElementById('monthPickerModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
     }
 
     function confirmMonthSelection() {
