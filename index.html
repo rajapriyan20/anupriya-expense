@@ -56,6 +56,14 @@
     }
     .pin-filled { animation: pinPulse 0.2s ease-in-out; }
   </style>
+
+  <!-- PWA & Mobile Web App Manifest (Generated dynamically via Blob) -->
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Anupriya Expense">
+  <link rel="manifest" id="pwaManifestLink">
 </head>
 <body class="h-full font-sans antialiased text-slate-800 bg-slate-900 flex justify-center selection:bg-brand-500 selection:text-white">
 
@@ -108,7 +116,7 @@
           <button onclick="backspacePin()" class="h-16 rounded-2xl text-slate-400 hover:text-white active-scale flex items-center justify-center text-xl"><i class="fa-solid fa-delete-left"></i></button>
         </div>
         <div class="text-center mt-6">
-          <span class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Admin: 6789 &bull; User: 5555</span>
+          <span class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">PIN: 6789 or 5555</span>
         </div>
       </div>
     </div>
@@ -124,7 +132,7 @@
             Anupriya Dinesh
           </h2>
           <div class="flex items-center gap-2">
-            <span id="userRoleBadge" class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded font-mono font-semibold uppercase">Admin</span>
+            <span id="userRoleBadge" class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded font-mono font-semibold uppercase">Full Access</span>
             <span id="currentMonthDisplay" class="text-xs text-slate-400 font-medium">Aug 2026</span>
           </div>
         </div>
@@ -143,6 +151,22 @@
         </button>
       </div>
     </header>
+
+    <!-- SUB-HEADER BAR: DEVELOPER CREDIT & WHATSAPP DIRECT LINK -->
+    <div class="bg-slate-800/90 text-slate-300 px-4 py-1.5 flex items-center justify-between text-[11px] border-b border-slate-700/60 z-10">
+      <span class="text-slate-400 font-medium flex items-center gap-1">
+        <i class="fa-solid fa-code text-[10px] text-emerald-400"></i>
+        Developed by <strong class="text-slate-200 font-semibold">Rajapriyan</strong>
+      </span>
+      <a href="https://wa.me/919600001118?text=Hey%20found%20your%20app%20interesting.%20Can%20we%20discuss%20further%20on%20this%20app%20%2F%20other%20new%20app%20needed%20for%20a%20different%20use%20case%3F" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 transition-colors font-semibold"
+         title="Chat with developer on WhatsApp">
+        <i class="fa-brands fa-whatsapp text-xs text-emerald-400"></i>
+        <span>Contact</span>
+      </a>
+    </div>
 
     <!-- SIDE MENU / DRAWER OVERLAY -->
     <div id="sideMenuBackdrop" onclick="toggleSideMenu()" class="absolute inset-0 z-40 bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0 pointer-events-none"></div>
@@ -179,20 +203,23 @@
           <button id="sideNavCategoryBtn" onclick="openCategoryMasterModal(); toggleSideMenu();" class="w-full text-left px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 flex items-center gap-3 text-sm font-medium">
             <i class="fa-solid fa-tags w-5 text-purple-400"></i> Category Master
           </button>
+          <button id="pwaInstallBtn" onclick="triggerPwaInstall()" class="w-full text-left px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 flex items-center gap-3 text-sm font-medium">
+            <i class="fa-solid fa-mobile-screen-button w-5 text-emerald-400"></i> Install App on Phone
+          </button>
           <button onclick="exportDataToCSV()" class="w-full text-left px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 flex items-center gap-3 text-sm font-medium">
             <i class="fa-solid fa-file-arrow-down w-5 text-cyan-400"></i> Export Monthly CSV
           </button>
         </nav>
       </div>
 
-      <div class="pt-4 border-t border-slate-800">
-        <div class="bg-slate-800/80 rounded-xl p-3 text-xs mb-3">
-          <p class="text-slate-400">Logged in as: <span id="sideMenuRoleText" class="text-emerald-400 font-bold uppercase">Administrator</span></p>
-          <p class="text-[11px] text-slate-500 mt-1">Full control enabled</p>
-        </div>
+      <div class="pt-4 border-t border-slate-800 space-y-3">
         <button onclick="lockApp()" class="w-full py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-medium text-xs flex items-center justify-center gap-2 border border-rose-500/20 active-scale">
           <i class="fa-solid fa-right-from-bracket"></i> Lock Session
         </button>
+        <!-- Version Counter Footer -->
+        <div class="text-center pt-1 border-t border-slate-800/60">
+          <p class="text-[10px] text-slate-500 font-mono tracking-widest uppercase">Version <span id="appVersionDisplay">v1.2.0</span></p>
+        </div>
       </div>
     </aside>
 
@@ -493,35 +520,27 @@
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
             <h3 class="text-base font-bold text-slate-800">Category Master</h3>
-            <p class="text-[11px] text-slate-400">Manage household expense categories</p>
+            <p class="text-[11px] text-slate-400">Add or edit household expense categories</p>
           </div>
           <button onclick="closeCategoryMasterModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
 
-        <!-- Add Category Form -->
+        <!-- Add / Edit Category Form -->
         <form id="categoryForm" onsubmit="handleSaveCategory(event)" class="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2">
           <input type="hidden" id="catIdInput">
-          <div class="flex gap-2">
-            <input type="text" id="catNameInput" required placeholder="Category name..." class="flex-1 text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-emerald-500">
-            <input type="color" id="catColorInput" value="#10b981" class="w-10 h-9 p-1 bg-white border border-slate-200 rounded-xl cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span id="catFormTitle" class="text-[11px] font-bold text-slate-600 uppercase">Create New Category</span>
+            <button type="button" id="catCancelEditBtn" onclick="resetCategoryForm()" class="hidden text-[10px] text-rose-500 font-semibold hover:underline">Cancel Edit</button>
           </div>
-          <div class="flex items-center justify-between pt-1">
-            <select id="catIconInput" class="text-xs bg-white border border-slate-200 rounded-xl p-2 focus:outline-none">
-              <option value="fa-cart-shopping">🛒 Shopping/Groceries</option>
-              <option value="fa-bolt">⚡ Utilities/Bills</option>
-              <option value="fa-house">🏠 Housing/Rent</option>
-              <option value="fa-utensils">🍽️ Dining/Food</option>
-              <option value="fa-graduation-cap">🎓 Education</option>
-              <option value="fa-heart-pulse">🏥 Medical/Health</option>
-              <option value="fa-car">🚗 Fuel/Transport</option>
-              <option value="fa-film">🎬 Entertainment</option>
-              <option value="fa-piggy-bank">🐖 Savings</option>
-              <option value="fa-box">📦 Miscellaneous</option>
-            </select>
-            <button type="submit" id="saveCatBtn" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl active-scale">
-              <i class="fa-solid fa-plus"></i> Save Category
+          <div class="flex gap-2">
+            <input type="text" id="catNameInput" required placeholder="Unique Category Name (e.g. Groceries)..." class="flex-1 text-xs bg-white border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-emerald-500">
+            <input type="color" id="catColorInput" value="#10b981" class="w-10 h-9 p-1 bg-white border border-slate-200 rounded-xl cursor-pointer" title="Category Theme Color">
+          </div>
+          <div class="flex justify-end pt-1">
+            <button type="submit" id="saveCatBtn" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl active-scale flex items-center justify-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-plus" id="saveCatBtnIcon"></i> <span id="saveCatBtnText">Save Category</span>
             </button>
           </div>
         </form>
@@ -624,7 +643,8 @@
           projectId: "anupriya-expense",
           storageBucket: "anupriya-expense.firebasestorage.app",
           messagingSenderId: "871878667228",
-          appId: "1:871878667228:web:7736834bd2f326244dfd19"
+          appId: "1:871878667228:web:7736834bd2f326244dfd19",
+          measurementId: "G-H2MYPE5EMQ"
         };
 
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'anupriya-expense-app';
@@ -634,19 +654,20 @@
 
     // Default Seed Master Categories
     const DEFAULT_CATEGORIES = [
-      { id: 'cat_groceries', name: 'Groceries & Provisions', color: '#10b981', icon: 'fa-cart-shopping', isSystem: true },
-      { id: 'cat_utilities', name: 'Electricity & Utilities', color: '#3b82f6', icon: 'fa-bolt', isSystem: true },
-      { id: 'cat_housing', name: 'Housing & Rent', color: '#8b5cf6', icon: 'fa-house', isSystem: true },
-      { id: 'cat_dining', name: 'Dining Out & Food', color: '#f59e0b', icon: 'fa-utensils', isSystem: true },
-      { id: 'cat_education', name: 'Education & Fees', color: '#ec4899', icon: 'fa-graduation-cap', isSystem: true },
-      { id: 'cat_medical', name: 'Healthcare & Medicines', color: '#ef4444', icon: 'fa-heart-pulse', isSystem: true },
-      { id: 'cat_transport', name: 'Fuel & Transportation', color: '#06b6d4', icon: 'fa-car', isSystem: true },
-      { id: 'cat_misc', name: 'Miscellaneous', color: '#64748b', icon: 'fa-box', isSystem: true }
+      { id: 'cat_groceries', name: 'Groceries & Provisions', color: '#10b981', icon: 'fa-cart-shopping' },
+      { id: 'cat_utilities', name: 'Electricity & Utilities', color: '#3b82f6', icon: 'fa-bolt' },
+      { id: 'cat_housing', name: 'Housing & Rent', color: '#8b5cf6', icon: 'fa-house' },
+      { id: 'cat_dining', name: 'Dining Out & Food', color: '#f59e0b', icon: 'fa-utensils' },
+      { id: 'cat_education', name: 'Education & Fees', color: '#ec4899', icon: 'fa-graduation-cap' },
+      { id: 'cat_medical', name: 'Healthcare & Medicines', color: '#ef4444', icon: 'fa-heart-pulse' },
+      { id: 'cat_transport', name: 'Fuel & Transportation', color: '#06b6d4', icon: 'fa-car' },
+      { id: 'cat_misc', name: 'Miscellaneous', color: '#64748b', icon: 'fa-box' }
     ];
 
-    // Global App State (Strict Firebase In-Memory state - NO LocalStorage fallback)
+    // Global App State
     window.appState = {
-      currentUserRole: null, // 'admin' (6789) or 'user' (5555)
+      version: 'v1.2.0',
+      currentUserRole: 'user', // Both roles have full edit access
       pinBuffer: '',
       currentMonth: new Date().toISOString().substring(0, 7), // "YYYY-MM"
       activeTab: 'home',
@@ -691,22 +712,25 @@
     // Initialize Auth & Firestore Realtime Listeners
     async function initAuth() {
       try {
+        if (auth.currentUser) {
+          setupFirestoreRealtime();
+          return;
+        }
         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
           await signInWithCustomToken(auth, __initial_auth_token);
         } else {
           await signInAnonymously(auth);
         }
       } catch (err) {
-        console.warn("Auth initialization error:", err);
-        showToast("Authentication Failed: " + err.message, "error");
+        console.warn("Auth initialization notice:", err);
+        // Fallback: Proceed with Firestore real-time connection
+        setupFirestoreRealtime();
       }
     }
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setupFirestoreRealtime();
-      } else {
-        renderAppUI();
       }
     });
 
@@ -733,7 +757,6 @@
           console.error("Firestore Category Sync Error:", error);
           window.appState.dbConnected = false;
           window.updateConnectionIndicator();
-          showToast("Firebase Sync Error: Categories unavailable", "error");
         }
       );
 
@@ -754,7 +777,6 @@
           console.error("Firestore Expense Sync Error:", error);
           window.appState.dbConnected = false;
           window.updateConnectionIndicator();
-          showToast("Firebase Sync Error: Expenses unavailable", "error");
         }
       );
 
@@ -777,17 +799,11 @@
           console.error("Firestore Budget Sync Error:", error);
           window.appState.dbConnected = false;
           window.updateConnectionIndicator();
-          showToast("Firebase Sync Error: Budgets unavailable", "error");
         }
       );
     }
 
     window.saveCategoryToDb = async function(categoryObj) {
-      if (!window.appState.currentUserRole || window.appState.currentUserRole !== 'admin') {
-        showToast("Only Admin can modify categories!", "error");
-        return;
-      }
-
       if (!navigator.onLine) {
         showToast("No internet connection! Cannot save to Firebase.", "error");
         return;
@@ -796,7 +812,7 @@
       try {
         const path = `artifacts/${appId}/public/data/categories`;
         await setDoc(doc(db, path, categoryObj.id), categoryObj);
-        showToast("Category saved to Firebase!");
+        showToast("Category updated in Firebase!");
       } catch (e) {
         console.error("Firestore category save error:", e);
         showToast("Firebase Error: " + (e.message || "Failed to save category"), "error");
@@ -804,11 +820,6 @@
     };
 
     window.deleteCategoryFromDb = async function(catId) {
-      if (window.appState.currentUserRole !== 'admin') {
-        showToast("Only Admin can delete categories!", "error");
-        return;
-      }
-
       if (!navigator.onLine) {
         showToast("No internet connection! Cannot delete from Firebase.", "error");
         return;
@@ -848,11 +859,6 @@
     };
 
     window.deleteExpenseFromDb = async function(expId) {
-      if (window.appState.currentUserRole !== 'admin') {
-        showToast("Only Admin can delete expenses!", "error");
-        return;
-      }
-
       if (!navigator.onLine) {
         showToast("No internet connection! Cannot delete from Firebase.", "error");
         return;
@@ -869,11 +875,6 @@
     };
 
     window.saveBudgetToDb = async function(monthKey, budgetObj) {
-      if (window.appState.currentUserRole !== 'admin') {
-        showToast("Only Admin can configure budgets!", "error");
-        return;
-      }
-
       if (!navigator.onLine) {
         showToast("No internet connection! Cannot save budget to Firebase.", "error");
         return;
@@ -894,10 +895,71 @@
   </script>
 
   <script>
+    // PWA Manifest and Installation Logic Setup
+    let deferredPwaPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPwaPrompt = e;
+      const installBtn = document.getElementById('pwaInstallBtn');
+      if (installBtn) installBtn.classList.remove('hidden');
+    });
+
+    function triggerPwaInstall() {
+      if (deferredPwaPrompt) {
+        deferredPwaPrompt.prompt();
+        deferredPwaPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            showToast("App installing on your home screen!");
+          }
+          deferredPwaPrompt = null;
+        });
+      } else {
+        showToast("To install: Tap your browser menu & select 'Add to Home Screen'");
+      }
+    }
+
+    // Dynamic Manifest Generation
+    (function setupPwaManifest() {
+      const manifestObj = {
+        name: "Anupriya Dinesh - Household Expense Tracker",
+        short_name: "Expenses",
+        start_url: ".",
+        display: "standalone",
+        background_color: "#0f172a",
+        theme_color: "#0f172a",
+        description: "Household Expense Tracker for Anupriya Dinesh",
+        icons: [{
+          src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='128' fill='%230f172a'/%3E%3Cpath fill='%2310b981' d='M256 80L80 220v212c0 15.5 12.5 28 28 28h112V320h72v140h112c15.5 0 28-12.5 28-28V220L256 80z'/%3E%3C/svg%3E",
+          sizes: "512x512",
+          type: "image/svg+xml",
+          purpose: "any maskable"
+        }]
+      };
+      const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/json' });
+      const manifestUrl = URL.createObjectURL(manifestBlob);
+      const manifestLink = document.getElementById('pwaManifestLink');
+      if (manifestLink) manifestLink.href = manifestUrl;
+    })();
+
     // Currency Formatter
     const formatRupee = (num) => {
       return '₹' + Number(num || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
     };
+
+    // Helper: Smart auto-icon selector for categories based on category name
+    function getSmartCategoryIcon(name) {
+      const lower = (name || '').toLowerCase();
+      if (lower.includes('grocery') || lower.includes('groceries') || lower.includes('supermarket') || lower.includes('shopping')) return 'fa-cart-shopping';
+      if (lower.includes('electric') || lower.includes('utility') || lower.includes('bill') || lower.includes('power') || lower.includes('water')) return 'fa-bolt';
+      if (lower.includes('house') || lower.includes('rent') || lower.includes('home') || lower.includes('maintenance')) return 'fa-house';
+      if (lower.includes('dining') || lower.includes('food') || lower.includes('restaurant') || lower.includes('swiggy') || lower.includes('zomato')) return 'fa-utensils';
+      if (lower.includes('school') || lower.includes('college') || lower.includes('fee') || lower.includes('education') || lower.includes('tuition')) return 'fa-graduation-cap';
+      if (lower.includes('health') || lower.includes('medical') || lower.includes('doctor') || lower.includes('pharmacy') || lower.includes('hospital')) return 'fa-heart-pulse';
+      if (lower.includes('fuel') || lower.includes('petrol') || lower.includes('diesel') || lower.includes('car') || lower.includes('bike') || lower.includes('transport')) return 'fa-car';
+      if (lower.includes('movie') || lower.includes('film') || lower.includes('entertainment') || lower.includes('ott')) return 'fa-film';
+      if (lower.includes('saving') || lower.includes('investment') || lower.includes('bank') || lower.includes('fd')) return 'fa-piggy-bank';
+      return 'fa-tags';
+    }
 
     // Toast Notification Display
     function showToast(message, type = 'success') {
@@ -958,13 +1020,7 @@
       const pin = window.appState.pinBuffer;
       const errorEl = document.getElementById('pinError');
 
-      if (pin === '6789') {
-        // ADMIN MODE
-        window.appState.currentUserRole = 'admin';
-        unlockApp();
-      } else if (pin === '5555') {
-        // USER MODE
-        window.appState.currentUserRole = 'user';
+      if (pin === '6789' || pin === '5555') {
         unlockApp();
       } else {
         errorEl.innerText = "Invalid PIN code. Try again.";
@@ -977,27 +1033,11 @@
       const lockScreen = document.getElementById('pinLockScreen');
       lockScreen.classList.add('-translate-y-full');
       
-      // Update Role Labels
-      const roleBadge = document.getElementById('userRoleBadge');
-      const sideRoleText = document.getElementById('sideMenuRoleText');
-      const adminBudgetBtn = document.getElementById('adminSetBudgetBtn');
-      const categorySideBtn = document.getElementById('sideNavCategoryBtn');
+      // Update Version Text
+      document.getElementById('appVersionDisplay').innerText = window.appState.version;
 
-      if (window.appState.currentUserRole === 'admin') {
-        roleBadge.innerText = 'Admin';
-        roleBadge.className = 'text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded font-mono font-semibold uppercase';
-        sideRoleText.innerText = 'Administrator';
-        adminBudgetBtn.style.display = 'flex';
-        categorySideBtn.style.display = 'flex';
-      } else {
-        roleBadge.innerText = 'User Mode';
-        roleBadge.className = 'text-[10px] bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded font-mono font-semibold uppercase';
-        sideRoleText.innerText = 'Standard User';
-        adminBudgetBtn.style.display = 'none'; // User cannot set budget
-        categorySideBtn.style.display = 'none'; // User cannot edit master category
-      }
-
-      showToast(`Unlocked as ${window.appState.currentUserRole === 'admin' ? 'Administrator' : 'User'}`);
+      // Personalized Welcome Popup
+      showToast("Welcome Anupriya 🎉");
       renderAppUI();
     }
 
@@ -1140,11 +1180,11 @@
       }
 
       container.innerHTML = sortedCats.map(([catId, amount]) => {
-        const cat = window.appState.categories.find(c => c.id === catId) || { name: 'Other', color: '#64748b', icon: 'fa-box' };
+        const cat = window.appState.categories.find(c => c.id === catId) || { name: 'Other', color: '#64748b', icon: 'fa-tags' };
         return `
           <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
             <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0" style="background-color: ${cat.color}">
-              <i class="fa-solid ${cat.icon} text-sm"></i>
+              <i class="fa-solid ${cat.icon || getSmartCategoryIcon(cat.name)} text-sm"></i>
             </div>
             <div class="overflow-hidden">
               <span class="text-[11px] font-bold text-slate-500 truncate block">${cat.name}</span>
@@ -1165,13 +1205,12 @@
       }
 
       container.innerHTML = sorted.map(exp => {
-        const cat = window.appState.categories.find(c => c.id === exp.categoryId) || { name: 'Expense', color: '#64748b', icon: 'fa-box' };
-        const isAdmin = window.appState.currentUserRole === 'admin';
+        const cat = window.appState.categories.find(c => c.id === exp.categoryId) || { name: 'Expense', color: '#64748b', icon: 'fa-tags' };
         return `
           <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div class="flex items-center gap-3 overflow-hidden">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0" style="background-color: ${cat.color}">
-                <i class="fa-solid ${cat.icon} text-sm"></i>
+                <i class="fa-solid ${cat.icon || getSmartCategoryIcon(cat.name)} text-sm"></i>
               </div>
               <div class="overflow-hidden">
                 <h5 class="text-xs font-bold text-slate-800 truncate">${exp.note || cat.name}</h5>
@@ -1180,10 +1219,8 @@
             </div>
             <div class="flex items-center gap-2 shrink-0">
               <span class="text-xs font-extrabold text-slate-900">${formatRupee(exp.amount)}</span>
-              ${isAdmin ? `
-                <button onclick="editExpense('${exp.id}')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-pen text-xs"></i></button>
-                <button onclick="deleteExpenseFromDb('${exp.id}')" class="text-slate-400 hover:text-rose-500 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
-              ` : ''}
+              <button onclick="editExpense('${exp.id}')" class="text-slate-400 hover:text-slate-600 p-1" title="Edit Expense"><i class="fa-solid fa-pen text-xs"></i></button>
+              <button onclick="deleteExpenseFromDb('${exp.id}')" class="text-slate-400 hover:text-rose-500 p-1" title="Delete Expense"><i class="fa-solid fa-trash text-xs"></i></button>
             </div>
           </div>
         `;
@@ -1342,7 +1379,7 @@
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white" style="background-color: ${cat.color}">
-                  <i class="fa-solid ${cat.icon} text-xs"></i>
+                  <i class="fa-solid ${cat.icon || getSmartCategoryIcon(cat.name)} text-xs"></i>
                 </div>
                 <span class="text-xs font-bold text-slate-800">${cat.name}</span>
               </div>
@@ -1370,14 +1407,9 @@
 
       // Populate Category Filter Dropdown if needed
       const catSelect = document.getElementById('historyCategoryFilter');
-      if (catSelect.options.length <= 1) {
-        window.appState.categories.forEach(c => {
-          const opt = document.createElement('option');
-          opt.value = c.id;
-          opt.innerText = c.name;
-          catSelect.appendChild(opt);
-        });
-      }
+      catSelect.innerHTML = `<option value="ALL">All Categories</option>` + 
+        window.appState.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      if (catFilter && catFilter !== 'ALL') catSelect.value = catFilter;
 
       let filtered = window.appState.expenses.filter(e => e.date && e.date.startsWith(currentMonth));
 
@@ -1405,15 +1437,13 @@
         return;
       }
 
-      const isAdmin = window.appState.currentUserRole === 'admin';
-
       container.innerHTML = filtered.sort((a,b) => new Date(b.date) - new Date(a.date)).map(exp => {
-        const cat = window.appState.categories.find(c => c.id === exp.categoryId) || { name: 'Expense', color: '#64748b', icon: 'fa-box' };
+        const cat = window.appState.categories.find(c => c.id === exp.categoryId) || { name: 'Expense', color: '#64748b', icon: 'fa-tags' };
         return `
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div class="flex items-center gap-3 overflow-hidden">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0" style="background-color: ${cat.color}">
-                <i class="fa-solid ${cat.icon} text-sm"></i>
+                <i class="fa-solid ${cat.icon || getSmartCategoryIcon(cat.name)} text-sm"></i>
               </div>
               <div class="overflow-hidden">
                 <h5 class="text-xs font-bold text-slate-800 truncate">${exp.note || cat.name}</h5>
@@ -1422,10 +1452,8 @@
             </div>
             <div class="flex items-center gap-2 shrink-0">
               <span class="text-xs font-extrabold text-slate-900">${formatRupee(exp.amount)}</span>
-              ${isAdmin ? `
-                <button onclick="editExpense('${exp.id}')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-pen text-xs"></i></button>
-                <button onclick="deleteExpenseFromDb('${exp.id}')" class="text-slate-400 hover:text-rose-500 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
-              ` : ''}
+              <button onclick="editExpense('${exp.id}')" class="text-slate-400 hover:text-slate-600 p-1" title="Edit Expense"><i class="fa-solid fa-pen text-xs"></i></button>
+              <button onclick="deleteExpenseFromDb('${exp.id}')" class="text-slate-400 hover:text-rose-500 p-1" title="Delete Expense"><i class="fa-solid fa-trash text-xs"></i></button>
             </div>
           </div>
         `;
@@ -1484,12 +1512,9 @@
       closeExpenseModal();
     }
 
-    // Category Master Modal
+    // Category Master Modal Logic & Form Resets
     function openCategoryMasterModal() {
-      if (window.appState.currentUserRole !== 'admin') {
-        showToast("Admin access required for Category Master!", "error");
-        return;
-      }
+      resetCategoryForm();
       renderCategoryMasterList();
       const modal = document.getElementById('categoryMasterModal');
       const card = document.getElementById('categoryMasterModalCard');
@@ -1502,6 +1527,30 @@
       const card = document.getElementById('categoryMasterModalCard');
       card.classList.add('translate-y-full');
       modal.classList.add('opacity-0', 'pointer-events-none');
+      resetCategoryForm();
+    }
+
+    function resetCategoryForm() {
+      document.getElementById('categoryForm').reset();
+      document.getElementById('catIdInput').value = '';
+      document.getElementById('catFormTitle').innerText = 'Create New Category';
+      document.getElementById('catCancelEditBtn').classList.add('hidden');
+      document.getElementById('saveCatBtnText').innerText = 'Save Category';
+      document.getElementById('saveCatBtnIcon').className = 'fa-solid fa-plus';
+    }
+
+    function editCategoryInMaster(catId) {
+      const cat = window.appState.categories.find(c => c.id === catId);
+      if (!cat) return;
+
+      document.getElementById('catIdInput').value = cat.id;
+      document.getElementById('catNameInput').value = cat.name;
+      document.getElementById('catColorInput').value = cat.color || '#10b981';
+
+      document.getElementById('catFormTitle').innerText = 'Edit Category Item';
+      document.getElementById('catCancelEditBtn').classList.remove('hidden');
+      document.getElementById('saveCatBtnText').innerText = 'Update Category';
+      document.getElementById('saveCatBtnIcon').className = 'fa-solid fa-check';
     }
 
     function renderCategoryMasterList() {
@@ -1510,19 +1559,23 @@
         // Calculate linked expenses count
         const linkedCount = window.appState.expenses.filter(e => e.categoryId === cat.id).length;
         const isProtected = linkedCount > 0;
+        const iconClass = cat.icon || getSmartCategoryIcon(cat.name);
 
         return `
           <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200">
             <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white" style="background-color: ${cat.color}">
-                <i class="fa-solid ${cat.icon} text-xs"></i>
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0" style="background-color: ${cat.color}">
+                <i class="fa-solid ${iconClass} text-xs"></i>
               </div>
               <div>
                 <span class="text-xs font-bold text-slate-800 block">${cat.name}</span>
                 ${isProtected ? `<span class="text-[10px] text-amber-600 font-medium">${linkedCount} active expense(s)</span>` : `<span class="text-[10px] text-slate-400">0 active expenses</span>`}
               </div>
             </div>
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1.5">
+              <button onclick="editCategoryInMaster('${cat.id}')" title="Edit Category" class="w-7 h-7 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center text-xs active-scale">
+                <i class="fa-solid fa-pen"></i>
+              </button>
               ${isProtected ? `
                 <button onclick="showToast('Cannot delete category with linked expenses (${linkedCount})', 'error')" title="Category in use" class="w-7 h-7 rounded-lg bg-slate-200 text-slate-400 cursor-not-allowed flex items-center justify-center text-xs">
                   <i class="fa-solid fa-lock text-xs"></i>
@@ -1542,11 +1595,13 @@
       event.preventDefault();
       const name = document.getElementById('catNameInput').value.trim();
       const color = document.getElementById('catColorInput').value;
-      const icon = document.getElementById('catIconInput').value;
-      const id = 'cat_' + name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const existingId = document.getElementById('catIdInput').value;
 
-      window.saveCategoryToDb({ id, name, color, icon, isSystem: false });
-      document.getElementById('categoryForm').reset();
+      const id = existingId || ('cat_' + name.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+      const icon = getSmartCategoryIcon(name);
+
+      window.saveCategoryToDb({ id, name, color, icon });
+      resetCategoryForm();
       renderCategoryMasterList();
     }
 
@@ -1557,10 +1612,6 @@
 
     // Budget Modal
     function openBudgetModal() {
-      if (window.appState.currentUserRole !== 'admin') {
-        showToast("Admin access required to set budget!", "error");
-        return;
-      }
       const currentMonth = window.appState.currentMonth;
       const budgetObj = window.appState.budgets[currentMonth] || { totalBudget: 40000, categoryBudgets: {} };
 
@@ -1569,11 +1620,12 @@
       const container = document.getElementById('budgetCategoryInputsList');
       container.innerHTML = window.appState.categories.map(cat => {
         const val = (budgetObj.categoryBudgets && budgetObj.categoryBudgets[cat.id]) || '';
+        const iconClass = cat.icon || getSmartCategoryIcon(cat.name);
         return `
           <div class="flex items-center justify-between gap-3">
             <div class="flex items-center gap-2 overflow-hidden flex-1">
               <div class="w-6 h-6 rounded flex items-center justify-center text-white text-[10px] shrink-0" style="background-color: ${cat.color}">
-                <i class="fa-solid ${cat.icon}"></i>
+                <i class="fa-solid ${iconClass}"></i>
               </div>
               <span class="text-xs font-medium text-slate-700 truncate">${cat.name}</span>
             </div>
